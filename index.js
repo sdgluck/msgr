@@ -64,7 +64,7 @@ function Channel (handlers, worker) {
   this.isWorker = !this.isClient
 
   // Is the comms channel open?
-  this.ready = defer()
+  this.open = defer()
 
   // Handlers for unknown message types
   this.receiveHandlers = []
@@ -74,7 +74,7 @@ function Channel (handlers, worker) {
   this.responseHandlers = {}
 
   if (this.isClient) {
-    this.ready.resolve()
+    this.open.resolve()
     this.recipient = worker
     this.messageChannel = new MessageChannel()
     this.messageChannel.port1.onmessage = this._handleMessage.bind(this)
@@ -105,7 +105,7 @@ Channel.prototype._handleMessage = function (event) {
     // Special init message type that gives us the port
     // that we will be sending messages to the client over
     this.recipient = event.ports[0]
-    this.ready.resolve()
+    this.open.resolve()
   }
 
   if (request.type in this.handlers) {
@@ -122,6 +122,10 @@ Channel.prototype._handleMessage = function (event) {
       handler(request.data, responder)
     })
   }
+}
+
+Channel.prototype.ready = function (fn) {
+  this.open.promise.then(fn)
 }
 
 /**
@@ -166,7 +170,7 @@ Channel.prototype.send = function (type, data, _id) {
     args.push([this.messageChannel.port2])
   }
 
-  this.ready.promise.then(function () {
+  this.open.promise.then(function () {
     this.recipient.postMessage.apply(this.recipient, args)
   }.bind(this))
 

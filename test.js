@@ -72,14 +72,14 @@ test('Message handler throws on malformed message', function (t) {
 
 test('Client sends CONNECT, worker receives', function (t) {
   t.equal(worker_connectSpy.callCount, 1)
-  client.ready.promise.then(function () {
+  client.open.promise.then(function () {
     t.end()
   })
 })
 
 test('Client sends known message, worker receives', function (t) {
   client.send('WORKER_KNOWN_MESSAGE_TYPE', 'data')
-  client.ready.promise.then(function () {
+  client.open.promise.then(function () {
     t.equal(worker_knownMessageTypeStub.callCount, 1)
     t.end()
   })
@@ -87,7 +87,7 @@ test('Client sends known message, worker receives', function (t) {
 
 test('Worker sends known message, client receives', function (t) {
   worker.send('CLIENT_KNOWN_MESSAGE_TYPE', 'data')
-  worker.ready.promise.then(function () {
+  worker.open.promise.then(function () {
     t.equal(client_knownMessageTypeStub.callCount, 1)
     t.end()
   })
@@ -96,7 +96,7 @@ test('Worker sends known message, client receives', function (t) {
 test('Client sends known message, worker responds', function (t) {
   resetStubs()
   var message = client.send('WORKER_KNOWN_MESSAGE_TYPE', 'data')
-  client.ready.promise.then(function () {
+  client.open.promise.then(function () {
     worker_knownMessageTypeStub.callArg(1)
     message.then(function () {
       t.end()
@@ -118,7 +118,7 @@ test('Registering multiple response handlers throws', function (t) {
 test('Worker sends known message, client responds', function (t) {
   resetStubs()
   var message = worker.send('CLIENT_KNOWN_MESSAGE_TYPE', 'data')
-  worker.ready.promise.then(function () {
+  worker.open.promise.then(function () {
     client_knownMessageTypeStub.callArg(1)
     message.then(function () {
       t.end()
@@ -129,7 +129,7 @@ test('Worker sends known message, client responds', function (t) {
 test('Client sends unknown message, worker receives', function (t) {
   resetStubs()
   client.send('data')
-  client.ready.promise.then(function () {
+  client.open.promise.then(function () {
     t.equal(worker_unknownMessageTypeStub.callCount, 1)
     t.end()
   })
@@ -138,7 +138,7 @@ test('Client sends unknown message, worker receives', function (t) {
 test('Worker sends unknown message, client receives', function (t) {
   resetStubs()
   worker.send('data')
-  worker.ready.promise.then(function () {
+  worker.open.promise.then(function () {
     t.equal(client_unknownMessageTypeStub.callCount, 1)
     t.end()
   })
@@ -147,7 +147,7 @@ test('Worker sends unknown message, client receives', function (t) {
 test('Client sends unknown message, worker responds', function (t) {
   resetStubs()
   var message = client.send('data')
-  client.ready.promise.then(function () {
+  client.open.promise.then(function () {
     worker_unknownMessageTypeStub.callArg(1)
     message.then(function () {
       t.end()
@@ -158,7 +158,7 @@ test('Client sends unknown message, worker responds', function (t) {
 test('Worker sends unknown message, client responds', function (t) {
   resetStubs()
   var message = worker.send('data')
-  worker.ready.promise.then(function () {
+  worker.open.promise.then(function () {
     client_unknownMessageTypeStub.callArg(1)
     message.then(function () {
       t.end()
