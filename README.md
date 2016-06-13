@@ -15,6 +15,24 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 - [Channel API](#channel-api)
 - [Message API](#message-api)
 
+## Import
+
+```js
+// ES6
+import msgr from 'msgr'
+
+// CommonJS
+var msgr = require('msgr')
+
+// RequireJS
+define(['msgr'], function (msgr) {/*...*/})
+```
+
+```html
+<!-- Script, available as `window.msgr` -->
+<script src="/node_modules/msgr/index.js"></script>
+```
+
 ## Initialise
 
 ### Example
@@ -23,36 +41,40 @@ __Client: `msgr.client()`__
 
 Pass in reference to the worker and a collection of message handlers:
 
-    const recipient = navigator.serviceWorker.controller
+```js
+const recipient = navigator.serviceWorker.controller
 
-    const channel = msgr.client(recipient, {
-      // Predefined message handlers
-      SAY_HELLO: (data) => console.log('Hello, ' + data) //=> 'Hello, World!'
-    })
+const channel = msgr.client(recipient, {
+  // Predefined message handlers
+  SAY_HELLO: (data) => console.log('Hello, ' + data) //=> 'Hello, World!'
+})
 
-    // Send something "unknown" to the worker.
-    // Notice it does not have a tag.
-    channel.send({
-      username: 'Flanders',
-      location: 'Springfield'
-    })
+// Send something "unknown" to the worker.
+// Notice it does not have a tag.
+channel.send({
+  username: 'Flanders',
+  location: 'Springfield'
+})
+```
 
 __Worker: `msgr.worker()`__
 
 On the worker you just pass in your message handlers:
 
-    const channel = msgr.worker({
-      CACHE_WEB_PAGE: cacheWebPage
-    })
+```js
+const channel = msgr.worker({
+  CACHE_WEB_PAGE: cacheWebPage
+})
 
-    channel.receive(function (data) {
-      // Do something with an "unknown" message
-      // that does not have a predefined handler.
-      console.log(data) //=> { username: 'Flanders', ... }
-    })
+channel.receive(function (data) {
+  // Do something with an "unknown" message
+  // that does not have a predefined handler.
+  console.log(data) //=> { username: 'Flanders', ... }
+})
 
-    // Send something "known" to the client using a tag.
-    channel.send('SAY_HELLO', 'World!')
+// Send something "known" to the client using a tag.
+channel.send('SAY_HELLO', 'World!')
+```
 
 ## msgr API
 
@@ -67,12 +89,14 @@ Returns a Channel. See the [Channel API Docs](#channel-api) for more details.
 
 Example:
 
-    msgr.client(navigator.serviceWorker.controller, {
-      NOTIFY: function (respond) {
-        new Notification('You have a notification!')
-        respond('GOT_THE_NOTIFICATION')
-      }
-    })
+```js
+msgr.client(navigator.serviceWorker.controller, {
+  NOTIFY: function (respond) {
+    new Notification('You have a notification!')
+    respond('GOT_THE_NOTIFICATION')
+  }
+})
+```
 
 ### `msgr.worker(handlers) : Channel`
 
@@ -84,12 +108,14 @@ Returns a Channel. See the [Channel API Docs](#channel-api) for more details.
 
 Example:
 
-    msgr.worker({
-      NOTIFY: function (respond) {
-        new Notification('You have a notification!')
-        respond('GOT_THE_NOTIFICATION')
-      }
-    })
+```js
+msgr.worker({
+  NOTIFY: function (respond) {
+    new Notification('You have a notification!')
+    respond('GOT_THE_NOTIFICATION')
+  }
+})
+```
 
 ## Channel API
 
@@ -104,9 +130,11 @@ Although you can register ready handlers, you can send messages before the chann
 
 Example:
 
-    channel.ready(function () {
-      application.start()
-    })
+```js
+channel.ready(function () {
+  application.start()
+})
+```
 
 ### `channel.send([type,] data) : Promise`
 
@@ -123,11 +151,13 @@ If called before the channel is ready the message will be queued and sent as soo
 
 Example:
 
-    // Tagged
-    channel.send('NOTIFY_USER', { message: 'Update complete' })
+```js
+// Tagged
+channel.send('NOTIFY_USER', { message: 'Update complete' })
 
-    // Untagged
-    channel.send('This is the untagged data')
+// Untagged
+channel.send('This is the untagged data')
+```
 
 ### `channel.receive(handler)`
 
@@ -139,9 +169,11 @@ The handler receives two arguments: the `data` of the message and a `respond` fu
 
 Example:
 
-    channel.receive(function (data, respond) {
-      console.log('Got some unknown data: ' + data)
-    })
+```js
+channel.receive(function (data, respond) {
+  console.log('Got some unknown data: ' + data)
+})
+```
 
 ## Message API
 
@@ -155,18 +187,20 @@ Note: a message can only have one `then` handler. Registering more than one will
 
 Example:
 
-    // In client message handlers
-    msgr({
-      NOTIFY_USER: function (data, respond) {
-        new Notification('Job ' + data.id + ' was completed')
-        respond('From worker: job deleted') // ACK
-      }
-    })
+```js
+// In client message handlers
+msgr({
+  NOTIFY_USER: function (data, respond) {
+    new Notification('Job ' + data.id + ' was completed')
+    respond('From worker: job deleted') // ACK
+  }
+})
 
-    // In worker
-    channel.send('NOTIFY_USER', { id: 1337 }).then((data) => {
-      console.log(data) //=> 'From worker: job deleted'
-    })
+// In worker
+channel.send('NOTIFY_USER', { id: 1337 }).then((data) => {
+  console.log(data) //=> 'From worker: job deleted'
+})
+```
 
 ### `respond([data])`
 
