@@ -57,7 +57,9 @@ channel.send({
 })
 
 // Send a "known" message to the worker
-channel.send('CACHE_ASSET', '/cat.gif')
+channel.send('CACHE_ASSET', '/cat.gif').then(function (message) {
+  console.log(message) //=> 'Caching complete!'
+})
 ```
 
 __Worker: `msgr.worker()`__
