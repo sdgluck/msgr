@@ -78,8 +78,10 @@ channel.receive(function (data) {
 // Send something "known" to the client using a tag.
 channel.send('SAY_HELLO', 'World!')
 
-function cacheAsset (url) {
-  // cache asset at `url`
+function cacheAsset (url, respond) {
+  doCaching().then(function () {
+    respond('Caching complete!')
+  })
 }
 ```
 
