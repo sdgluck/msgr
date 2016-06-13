@@ -55,6 +55,9 @@ channel.send({
   username: 'Flanders',
   location: 'Springfield'
 })
+
+// Send a "known" message to the worker
+channel.send('CACHE_WEB_PAGE', '/cat.gif')
 ```
 
 __Worker: `msgr.worker()`__
@@ -74,6 +77,10 @@ channel.receive(function (data) {
 
 // Send something "known" to the client using a tag.
 channel.send('SAY_HELLO', 'World!')
+
+function cacheAsset (url) {
+  // cache asset at `url`
+}
 ```
 
 ## msgr API
