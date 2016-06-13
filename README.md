@@ -143,13 +143,13 @@ Example:
     msgr({
       NOTIFY_USER: function (data, respond) {
         new Notification('Job ' + data.id + ' was completed')
-        respond() // ACK
+        respond('From worker: job deleted') // ACK
       }
     })
 
     // In worker
     channel.send('NOTIFY_USER', { id: 1337 }).then((data) => {
-      console.log('Job ' + data.id + ' deleted') //=> 'Job 1337 deleted'
+      console.log(data) //=> 'From worker: job deleted'
     })
 
 ### `respond([data])`
