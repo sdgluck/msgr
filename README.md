@@ -9,9 +9,11 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
 ## Table of Contents
 
+- [Import](#import)
 - [Initialise](#initialise)
-- [API](#api)
+- [msgr API](#msgr-api)
 - [Channel API](#channel-api)
+- [Message API](#message-api)
 
 ## Initialise
 
@@ -52,23 +54,37 @@ On the worker you just pass in your message handlers:
     // Send something "known" to the client using a tag.
     channel.send('SAY_HELLO', 'World!')
 
-## API
+## msgr API
 
-### `msgr([worker,] handlers) : Channel`
+### `msgr.client(serviceWorker, handlers) : Channel`
 
-Initialise `msgr`.
+Initialise a `msgr` client.
 
-- [__worker__] {ServiceWorkerRegistration} _(optional)_ Worker that will receive messages sent via channel
+- __serviceWorker__ {ServiceWorkerRegistration} Worker that will receive messages sent via channel
 - __handlers__ {Object} An object of message type/handler mappings
-
-The handler is given an argument `respond` which allows the recipient to respond once to the message.
-See the [Message API Docs](#message-api) for more details.
 
 Returns a Channel. See the [Channel API Docs](#channel-api) for more details.
 
 Example:
 
-    msgr(navigator.serviceWorker.controller, {
+    msgr.client(navigator.serviceWorker.controller, {
+      NOTIFY: function (respond) {
+        new Notification('You have a notification!')
+        respond('GOT_THE_NOTIFICATION')
+      }
+    })
+
+### `msgr.worker(handlers) : Channel`
+
+Initialise a `msgr` worker.
+
+- __handlers__ {Object} An object of message type/handler mappings
+
+Returns a Channel. See the [Channel API Docs](#channel-api) for more details.
+
+Example:
+
+    msgr.worker({
       NOTIFY: function (respond) {
         new Notification('You have a notification!')
         respond('GOT_THE_NOTIFICATION')
