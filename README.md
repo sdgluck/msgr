@@ -49,7 +49,7 @@ On the worker you just pass in your message handlers:
       console.log(data) //=> { username: 'Flanders', ... }
     })
 
-    // Send something known to the client using a tag.
+    // Send something "known" to the client using a tag.
     channel.send('SAY_HELLO', 'World!')
 
 ## API
@@ -155,7 +155,8 @@ Example:
 ### `respond([data])`
 
 Send a response to a received message.
-This function is passed as the second argument to both known and unknown message handlers.
+
+This function is passed as the second argument to both "known" and "unknown" message handlers.
 
 - [__data__] {Any} _(optional)_ The data to respond to the message with
 

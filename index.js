@@ -35,6 +35,7 @@ function msgr (messageHandlers, worker) {
 msgr.worker = function (messageHandlers) {
   return msgr(messageHandlers, null)
 }
+
 /**
  * Initialise a client to send and receive messages to and from the worker.
  * @param {ServiceWorkerRegistration} worker
@@ -146,14 +147,16 @@ Channel.prototype.send = function (type, data, _id) {
 
   var _this = this
 
-  if (type !== msgr.types.RESPONSE && !data) {
+  if (!data) {
     data = type
-    type = msgr.types.UNKNOWN
+    if (type !== msgr.types.RESPONSE) {
+      type = msgr.types.UNKNOWN
+    }
   }
 
   var payload = JSON.stringify({
     type: type,
-    data: data || null,
+    data: data,
     id: _id
   })
 
