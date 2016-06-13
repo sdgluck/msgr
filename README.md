@@ -57,7 +57,7 @@ channel.send({
 })
 
 // Send a "known" message to the worker
-channel.send('CACHE_WEB_PAGE', '/cat.gif')
+channel.send('CACHE_ASSET', '/cat.gif')
 ```
 
 __Worker: `msgr.worker()`__
@@ -66,7 +66,7 @@ On the worker you just pass in your message handlers:
 
 ```js
 const channel = msgr.worker({
-  CACHE_WEB_PAGE: cacheWebPage
+  CACHE_ASSET: cacheAsset
 })
 
 channel.receive(function (data) {
