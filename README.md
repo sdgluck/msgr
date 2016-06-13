@@ -142,7 +142,6 @@ Example:
     // In client message handlers
     msgr({
       NOTIFY_USER: function (data, respond) {
-      NOTIFY_USER: function (data, respond) {
         new Notification('Job ' + data.id + ' was completed')
         respond() // ACK
       }
