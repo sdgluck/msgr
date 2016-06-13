@@ -1,0 +1,19 @@
+{
+  "name": "msgr",
+  "version": "0.1.0",
+  "description": "Nifty worker/client postMessage utility",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "author": "Sam Gluck <sdgluck@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "mini-defer": "0.0.5",
+    "shortid": "^2.2.6"
+  },
+  "devDependencies": {
+    "sinon": "^1.17.4",
+    "tape": "^4.5.1"
+  }
+}
