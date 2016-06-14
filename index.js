@@ -71,8 +71,6 @@ function Channel (handlers, worker) {
   if (this.isClient) {
     this.open.resolve()
     this.recipient = worker
-    this.messageChannel = new _MessageChannel()
-    this.messageChannel.port1.onmessage = this._handleMessage.bind(this)
     this.send(msgr.types.CONNECT, 'connect')
   } else {
     _self.onmessage = this._handleMessage.bind(this)
@@ -88,7 +86,7 @@ Channel.prototype._handleMessage = function (event) {
   try {
     var request = JSON.parse(event.data)
     var id = request.id
-  } catch (err) {
+  } catch ( err ) {
     throw new Error('msgr: ignoring malformed message')
   }
 
@@ -96,11 +94,11 @@ Channel.prototype._handleMessage = function (event) {
     this.send(msgr.types.RESPONSE, data, id)
   }.bind(this)
 
-  if (this.isWorker && request.type === msgr.types.CONNECT) {
-    // Special init message type that gives us the port
-    // that we will be sending messages to the client over
+  if (this.isWorker) {
     this.recipient = event.ports[0]
-    this.open.resolve()
+    if (request.type === msgr.types.CONNECT) {
+      this.open.resolve()
+    }
   }
 
   if (request.type in this.handlers) {
@@ -162,7 +160,9 @@ Channel.prototype.send = function (type, data, _id) {
   var args = [payload]
 
   if (this.isClient) {
-    args.push([this.messageChannel.port2])
+    var messageChannel = new _MessageChannel()
+    messageChannel.port1.onmessage = this._handleMessage.bind(this)
+    args.push([messageChannel.port2])
   }
 
   this.open.promise.then(function () {
