@@ -1,4 +1,4 @@
-/* global Promise:false, define:false, module:false, self:false */
+/* global Promise:false, define:false, module:false, self:false, MessageChannel:false */
 
 'use strict'
 
@@ -6,16 +6,10 @@ var shortid = require('shortid')
 var defer = require('mini-defer')
 
 // Proxy references for testing
-var _self
-var _MessageChannel
-
-if (typeof define === 'function' && define.amd) {
-  define('msgr', function () { return msgr })
-} else if (typeof module === 'object' && module.exports) {
-  module.exports = msgr
-} else {
-  self.msgr = msgr
-}
+try {
+  var _self = self
+  var _MessageChannel = MessageChannel
+} catch (err) {}
 
 /**
  * Initialise a client or worker to send and receive messages.
@@ -44,7 +38,7 @@ msgr.worker = function (messageHandlers) {
  */
 msgr.client = function (worker, messageHandlers, __mockMessageChannel) {
   _self = __mockMessageChannel ? {} : self
-  _MessageChannel = __mockMessageChannel || self.MessageChannel
+  _MessageChannel = __mockMessageChannel || MessageChannel
   return msgr(messageHandlers, worker)
 }
 
@@ -187,4 +181,22 @@ Channel.prototype.send = function (type, data, _id) {
       _this.responseHandlers[_id] = handler
     }
   }
+}
+
+// ---
+// Export
+// ---
+
+var api = {
+  client: msgr.client,
+  worker: msgr.worker,
+  types: msgr.types
+}
+
+if (typeof define === 'function' && define.amd) {
+  define('msgr', function () { return api })
+} else if (typeof module === 'object' && module.exports) {
+  module.exports = api
+} else {
+  self.msgr = api
 }

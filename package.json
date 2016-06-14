@@ -1,6 +1,6 @@
 {
   "name": "msgr",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Nifty worker/client postMessage utility",
   "main": "index.js",
   "scripts": {
