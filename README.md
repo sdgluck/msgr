@@ -158,11 +158,9 @@ channel.ready(function () {
 Send a message through the channel to the worker/client.
 
 - [__type__] {String} _(optional)_ The message type
-- __data__ {Any} The message data
+- __data__ {Any} The message data (it will be JSON.stringify'd)
 
 Returns a Message. See the [Message API Docs](#message-api) for more details.
-
-If `data` is not a string it will be stringified by calling `data.toString()`.
 
 If called before the channel is ready the message will be queued and sent as soon as the channel is open.
 
