@@ -10,7 +10,7 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 Makes communication between a client and service worker super easy...
 
 - Send messages from `client -> worker` and `worker -> client` with one call to `channel.send()`
-- Simple API: send anonymous data-only messages _or_ a typed message with data
+- Simple API: send anonymous data-only messages, typed-only messages, or typed messages with data
 - Register handlers for typed messages and anonymous messages
 - Easily respond to any message by calling `respond()` in the handler
 - Receive a response for a message using the familiar Promise `then()` method
@@ -167,10 +167,13 @@ If called before the channel is ready the message will be queued and sent as soo
 Example:
 
 ```js
-// Tagged
+// Typed message, will invoke registered type handlers
+channel.send('NOTIFY_USER')
+
+// Typed message with data, will invoke registered type handlers
 channel.send('NOTIFY_USER', { message: 'Update complete' })
 
-// Untagged
+// Anonymous, will invoke `receive` handlers
 channel.send('This is the untagged data')
 ```
 

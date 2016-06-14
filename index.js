@@ -92,8 +92,10 @@ Channel.prototype._handleMessage = function (event) {
   try {
     var request = JSON.parse(event.data)
     var id = request.id
+    var type = request.type
+    if (!id || !type) throw new Error()
   } catch (err) {
-    throw new Error('msgr: ignoring malformed message')
+    throw new Error('msgr: malformed message')
   }
 
   var responder = function (data) {
@@ -107,8 +109,11 @@ Channel.prototype._handleMessage = function (event) {
     this.open.resolve()
   }
 
-  if (request.type in this.handlers) {
-    // Known message type, invoke registered handler
+  if (request.type === msgr.types.UNKNOWN && request.data in this.handlers) {
+    // Known message type without data, invoke registered handler
+    this.handlers[request.data](null, responder)
+  } else if (request.type in this.handlers) {
+    // Known message type with data, invoke registered handler
     this.handlers[request.type](request.data, responder)
   } else if (id && id in this.promises) {
     // Response to a message, invoke registered response handler
