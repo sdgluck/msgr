@@ -6,15 +6,15 @@ var shortid = require('shortid')
 var defer = require('mini-defer')
 
 // Proxy references for testing
-var _self = self || {}
-var _MessageChannel = self.MessageChannel
+var _self
+var _MessageChannel
 
 if (typeof define === 'function' && define.amd) {
   define('msgr', function () { return msgr })
 } else if (typeof module === 'object' && module.exports) {
   module.exports = msgr
 } else {
-  _self.msgr = msgr
+  self.msgr = msgr
 }
 
 /**
@@ -43,7 +43,8 @@ msgr.worker = function (messageHandlers) {
  * @returns {Channel}
  */
 msgr.client = function (worker, messageHandlers, __mockMessageChannel) {
-  _MessageChannel = __mockMessageChannel || _MessageChannel
+  _self = __mockMessageChannel ? {} : self
+  _MessageChannel = __mockMessageChannel || self.MessageChannel
   return msgr(messageHandlers, worker)
 }
 
