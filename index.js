@@ -86,7 +86,7 @@ Channel.prototype._handleMessage = function (event) {
   try {
     var request = JSON.parse(event.data)
     var id = request.id
-  } catch ( err ) {
+  } catch (err) {
     throw new Error('msgr: ignoring malformed message')
   }
 
