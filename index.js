@@ -1,4 +1,4 @@
-/* global MessageChannel:false, Promise:false, define:false, module:false */
+/* global Promise:false, define:false, module:false */
 
 'use strict'
 
@@ -6,11 +6,11 @@ var shortid = require('shortid')
 var defer = require('mini-defer')
 
 // Proxy references for testing
-var MessageChannel = MessageChannel || null
 var self = self || {}
+var MessageChannel = self.MessageChannel
 
 if (typeof define === 'function' && define.amd) {
-  define('msgr', function () {return msgr})
+  define('msgr', function () { return msgr })
 } else if (typeof module === 'object' && module.exports) {
   module.exports = msgr
 } else {
@@ -133,9 +133,9 @@ Channel.prototype.ready = function (fn) {
  * @param {Function} handler
  */
 Channel.prototype.receive = function (handler) {
-  if (typeof handler !== 'function')
+  if (typeof handler !== 'function') {
     throw new Error('msgr: expecting handler to be a function')
-
+  }
   this.receiveHandlers.push(handler)
 }
 
@@ -180,9 +180,9 @@ Channel.prototype.send = function (type, data, _id) {
      * @param {Function} handler
      */
     then: function (handler) {
-      if (_this.responseHandlers[_id])
+      if (_this.responseHandlers[_id]) {
         throw new Error('msgr: you can register only one response handler')
-
+      }
       _this.responseHandlers[_id] = handler
     }
   }

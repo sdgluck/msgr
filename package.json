@@ -4,16 +4,38 @@
   "description": "Nifty worker/client postMessage utility",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "lint": "standard index.js",
+    "test": "node test.js",
+    "prepublish": "npm run -s lint"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sdgluck/msgr.git"
   },
   "author": "Sam Gluck <sdgluck@gmail.com>",
   "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sdgluck/msgr/issues"
+  },
+  "homepage": "https://github.com/sdgluck/msgr#readme",
+  "keywords": [
+    "message",
+    "postMessage",
+    "post",
+    "service",
+    "worker",
+    "sw",
+    "client",
+    "communication",
+    "comms"
+  ],
   "dependencies": {
     "mini-defer": "0.0.5",
     "shortid": "^2.2.6"
   },
   "devDependencies": {
     "sinon": "^1.17.4",
+    "standard": "^7.1.2",
     "tape": "^4.5.1"
   }
 }
