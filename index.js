@@ -1,4 +1,4 @@
-/* global Promise:false, define:false, module:false */
+/* global Promise:false, define:false, module:false, self:false */
 
 'use strict'
 
