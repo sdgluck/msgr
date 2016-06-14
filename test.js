@@ -70,6 +70,12 @@ test('Message handler throws on malformed message', function (t) {
   }
 })
 
+test('Runs ready handler once channel is open', function (t) {
+  client.ready(function () {
+    t.end()
+  })
+})
+
 test('Client sends CONNECT, worker receives', function (t) {
   t.equal(worker_connectSpy.callCount, 1)
   client.open.promise.then(function () {
