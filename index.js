@@ -68,9 +68,9 @@ function Channel (handlers, worker) {
   // Handlers for unknown message types
   this.receiveHandlers = []
 
-  // ID/response handlers use for handling `responds()`s
-  // key = id string, value = function
-  this.responseHandlers = {}
+  // Deferreds for sent messages so we can resolve
+  // the promise if they receive a response
+  this.promises = {}
 
   if (this.isClient) {
     this.open.resolve()
@@ -110,11 +110,11 @@ Channel.prototype._handleMessage = function (event) {
   if (request.type in this.handlers) {
     // Known message type, invoke registered handler
     this.handlers[request.type](request.data, responder)
-  } else if (id && id in this.responseHandlers) {
+  } else if (id && id in this.promises) {
     // Response to a message, invoke registered response handler
-    var handler = this.responseHandlers[id]
-    handler(request.data)
-    this.responseHandlers[id] = null
+    var promise = this.promises[id]
+    promise.resolve()
+    this.promises[id] = null
   } else {
     // Unknown message type, invoke receive handlers
     this.receiveHandlers.forEach(function (handler) {
@@ -145,9 +145,7 @@ Channel.prototype.receive = function (handler) {
  * @returns {Object}
  */
 Channel.prototype.send = function (type, data, _id) {
-  _id = _id || shortid.generate()
-
-  var _this = this
+  var id = _id || shortid.generate()
 
   if (!data) {
     data = type
@@ -156,11 +154,13 @@ Channel.prototype.send = function (type, data, _id) {
     }
   }
 
+  var deferred = defer()
+
   var payload = JSON.stringify({
     __msgr: true,
+    id: id,
     type: type,
-    data: data,
-    id: _id
+    data: data
   })
 
   var args = [payload]
@@ -173,18 +173,9 @@ Channel.prototype.send = function (type, data, _id) {
     this.recipient.postMessage.apply(this.recipient, args)
   }.bind(this))
 
-  return {
-    /**
-     * Register a one-off response handler for a message.
-     * @param {Function} handler
-     */
-    then: function (handler) {
-      if (_this.responseHandlers[_id]) {
-        throw new Error('msgr: you can register only one response handler')
-      }
-      _this.responseHandlers[_id] = handler
-    }
-  }
+  this.promises[id] = deferred
+
+  return deferred.promise
 }
 
 // ---

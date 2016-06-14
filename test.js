@@ -110,17 +110,6 @@ test('Client sends known message, worker responds', function (t) {
   })
 })
 
-test('Registering multiple response handlers throws', function (t) {
-  resetStubs()
-  var message = client.send('WORKER_KNOWN_MESSAGE_TYPE', 'data')
-  message.then(function () {})
-  try {
-    message.then(function () {})
-  } catch (err) {
-    t.end()
-  }
-})
-
 test('Worker sends known message, client responds', function (t) {
   resetStubs()
   var message = worker.send('CLIENT_KNOWN_MESSAGE_TYPE', 'data')

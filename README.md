@@ -13,7 +13,7 @@ Makes communication between a client and service worker super easy...
 - Simple API: send anonymous data-only messages _or_ a typed message with data
 - Register handlers for typed messages and anonymous messages
 - Easily respond to any message by calling `respond()` in the handler
-- Register response handlers for anonymous and typed messages using the familiar `then()` method
+- Receive a response for a message using the familiar Promise `then()` method
 
 ## Table of Contents
 
@@ -199,8 +199,6 @@ channel.receive(function (data, respond) {
 Register a handler to receive the response to a message.
 
 - __handler__ {Function} Response handler
-
-Note: a message can only have one `then` handler. Registering more than one will throw an error.
 
 Example:
 
