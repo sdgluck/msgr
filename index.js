@@ -11,6 +11,10 @@ try {
   var _MessageChannel = MessageChannel
 } catch (err) {}
 
+// ---
+// API
+// ---
+
 /**
  * Initialise a client or worker to send and receive messages.
  * @param {Object} messageHandlers
@@ -50,7 +54,7 @@ msgr.types = {
 }
 
 // ---
-// App
+// Channel
 // ---
 
 function Channel (handlers, worker) {
@@ -71,6 +75,8 @@ function Channel (handlers, worker) {
   if (this.isClient) {
     this.open.resolve()
     this.recipient = worker
+    this.messageChannel = new _MessageChannel()
+    this.messageChannel.port1.onmessage = this._handleMessage.bind(this)
     this.send(msgr.types.CONNECT, 'connect')
   } else {
     _self.onmessage = this._handleMessage.bind(this)
@@ -94,11 +100,11 @@ Channel.prototype._handleMessage = function (event) {
     this.send(msgr.types.RESPONSE, data, id)
   }.bind(this)
 
-  if (this.isWorker) {
+  if (this.isWorker && request.type === msgr.types.CONNECT) {
+    // Special init message type that gives us the port
+    // that we will be sending messages to the client over
     this.recipient = event.ports[0]
-    if (request.type === msgr.types.CONNECT) {
-      this.open.resolve()
-    }
+    this.open.resolve()
   }
 
   if (request.type in this.handlers) {
@@ -136,8 +142,7 @@ Channel.prototype.receive = function (handler) {
  * Send a message.
  * @param {String|*} type The message type or message data
  * @param {*} [data] The message data
- * @param {String} [_id] Message ID if this is a response
- * @returns {{then: then}}
+ * @returns {Object}
  */
 Channel.prototype.send = function (type, data, _id) {
   _id = _id || shortid.generate()
@@ -152,6 +157,7 @@ Channel.prototype.send = function (type, data, _id) {
   }
 
   var payload = JSON.stringify({
+    __msgr: true,
     type: type,
     data: data,
     id: _id
@@ -160,9 +166,7 @@ Channel.prototype.send = function (type, data, _id) {
   var args = [payload]
 
   if (this.isClient) {
-    var messageChannel = new _MessageChannel()
-    messageChannel.port1.onmessage = this._handleMessage.bind(this)
-    args.push([messageChannel.port2])
+    args.push([this.messageChannel.port2])
   }
 
   this.open.promise.then(function () {

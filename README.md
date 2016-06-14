@@ -9,10 +9,16 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
 Makes communication between a client and service worker super easy...
 
+- Send messages from `client -> worker` and `worker -> client` with one call to `channel.send()`
+- Simple API: send anonymous data-only messages _or_ a typed message with data
+- Register handlers for typed messages and anonymous messages
+- Easily respond to any message by calling `respond()` in the handler
+- Register response handlers for anonymous and typed messages using the familiar `then()` method
+
 ## Table of Contents
 
 - [Import](#import)
-- [Initialise](#initialise)
+- [Initialise & Example](#initialise-&-example)
 - [msgr API](#msgr-api)
 - [Channel API](#channel-api)
 - [Message API](#message-api)
@@ -35,9 +41,7 @@ define(['msgr'], function (msgr) {/*...*/})
 <script src="/node_modules/msgr/index.js"></script>
 ```
 
-## Initialise
-
-### Example
+## Initialise & Example
 
 __Client: `msgr.client()`__
 
