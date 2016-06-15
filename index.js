@@ -170,7 +170,7 @@ Channel.prototype.send = function (type, data, _id) {
 
   var args = [payload]
 
-  if (this.isClient && type === msgr.types.CONNECT) {
+  if (this.isClient && data === msgr.types.CONNECT) {
     args.push([this.messageChannel.port2])
   }
 
