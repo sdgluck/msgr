@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "standard index.js",
     "test": "node test.js",
-    "prepublish": "npm run -s lint"
+    "prepublish": "npm run -s lint && npm run -s test"
   },
   "repository": {
     "type": "git",
