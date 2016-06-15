@@ -77,7 +77,7 @@ function Channel (handlers, worker) {
     this.recipient = worker
     this.messageChannel = new _MessageChannel()
     this.messageChannel.port1.onmessage = this._handleMessage.bind(this)
-    this.send(msgr.types.CONNECT, 'connect')
+    this.send(msgr.types.CONNECT)
   } else {
     _self.onmessage = this._handleMessage.bind(this)
   }
@@ -102,7 +102,7 @@ Channel.prototype._handleMessage = function (event) {
     this.send(msgr.types.RESPONSE, data, id)
   }.bind(this)
 
-  if (this.isWorker && request.type === msgr.types.CONNECT) {
+  if (this.isWorker && request.type === msgr.types.UNKNOWN && request.data === msgr.types.CONNECT) {
     // Special init message type that gives us the port
     // that we will be sending messages to the client over
     this.recipient = event.ports[0]
@@ -170,7 +170,7 @@ Channel.prototype.send = function (type, data, _id) {
 
   var args = [payload]
 
-  if (this.isClient) {
+  if (this.isClient && type === msgr.types.CONNECT) {
     args.push([this.messageChannel.port2])
   }
 
