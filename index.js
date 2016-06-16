@@ -102,7 +102,7 @@ Channel.prototype._handleMessage = function (event) {
     this.send(msgr.types.RESPONSE, data, id)
   }.bind(this)
 
-  if (this.isWorker && request.type === msgr.types.UNKNOWN && request.data === msgr.types.CONNECT) {
+  if (this.isWorker && request.data === msgr.types.CONNECT) {
     // Special init message type that gives us the port
     // that we will be sending messages to the client over
     this.recipient = event.ports[0]
@@ -118,7 +118,7 @@ Channel.prototype._handleMessage = function (event) {
   } else if (id && id in this.promises) {
     // Response to a message, invoke registered response handler
     var promise = this.promises[id]
-    promise.resolve()
+    promise.resolve(request.data)
     this.promises[id] = null
   } else {
     // Unknown message type, invoke receive handlers
