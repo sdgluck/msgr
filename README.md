@@ -19,6 +19,7 @@ Makes communication between a client and service worker super easy...
 
 - [Import](#import)
 - [Initialise & Example](#initialise-&-example)
+- [Sending Messages](#sending-messages)
 - [msgr API](#msgr-api)
 - [Channel API](#channel-api)
 - [Message API](#message-api)
@@ -92,6 +93,59 @@ function cacheAsset (url, respond) {
   })
 }
 ```
+
+## Sending Messages
+
+- Anonymous, data-only message:
+
+    ```js
+    channel.send({ requestId: '123' })
+    ```
+    
+- Type-only message:
+
+    ```js
+    channel.send('RE_CACHE')
+    ```
+
+- Typed message with data:
+
+    ```js
+    channel.send('RE_CACHE', { assetUrl: '/cat.gif' })
+    ```
+    
+## Receiving messages
+
+The API for receiving messages is the same for both the worker and client.
+
+- Anonymous, data-only message:
+
+    ```js
+    channel.receive((data) => {
+      console.log(data.requestId) //=> '123'
+    })
+    ```
+    
+- Type-only message:
+
+    ```js
+    msgr.client({
+      'RE_CACHE': (data, respond) => {
+        console.log(data) //=> null
+      }
+    })
+    ```
+
+- Typed message with data:
+
+    ```js
+    
+    msgr.client({
+      'RE_CACHE': (data, respond) => {
+        console.log(data.assetUrl) //=> '/cat.gif'
+      }
+    })
+    ```
 
 ## msgr API
 
