@@ -115,7 +115,7 @@ function cacheAsset (url, respond) {
     channel.send('RE_CACHE', { assetUrl: '/cat.gif' })
     ```
     
-## Receiving messages
+## Receiving Messages
 
 The API for receiving messages is the same for both the worker and client.
 
