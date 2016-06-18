@@ -1,6 +1,6 @@
 # msgr
 
-> Nifty worker/client postMessage utility
+> Nifty service worker/client message utility
 
 Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
