@@ -20,6 +20,7 @@ Makes communication between a client and service worker super easy...
 - [Import](#import)
 - [Initialise & Example](#initialise-&-example)
 - [Sending Messages](#sending-messages)
+- [Receiving Messages](#receiving-messages)
 - [msgr API](#msgr-api)
 - [Channel API](#channel-api)
 - [Message API](#message-api)
