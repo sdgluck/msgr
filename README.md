@@ -76,7 +76,11 @@ On the worker you just pass in your message handlers:
 
 ```js
 const channel = msgr.worker({
-  CACHE_ASSET: cacheAsset
+  CACHE_ASSET: (url, respond) => {
+    cache(url).then(function () {
+      respond('Caching complete!')
+    })
+  }
 })
 
 channel.receive(function (data) {
@@ -87,12 +91,6 @@ channel.receive(function (data) {
 
 // Send something "known" to the client using a tag.
 channel.send('SAY_HELLO', 'World!')
-
-function cacheAsset (url, respond) {
-  doCaching().then(function () {
-    respond('Caching complete!')
-  })
-}
 ```
 
 ## Sending Messages
