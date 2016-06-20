@@ -129,7 +129,7 @@ The API for receiving messages is the same for both the worker and client.
 
     ```js
     msgr.client({
-      'RE_CACHE': (data, respond) => {
+      RE_CACHE: (data, respond) => {
         console.log(data) //=> null
       }
     })
@@ -140,7 +140,7 @@ The API for receiving messages is the same for both the worker and client.
     ```js
     
     msgr.client({
-      'RE_CACHE': (data, respond) => {
+      RE_CACHE: (data, respond) => {
         console.log(data.assetUrl) //=> '/cat.gif'
       }
     })
