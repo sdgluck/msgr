@@ -27,6 +27,8 @@ Makes communication between a client and service worker super easy...
 
 ## Import
 
+__Client__
+
 ```js
 // ES6
 import msgr from 'msgr'
@@ -41,6 +43,17 @@ define(['msgr'], function (msgr) {/*...*/})
 ```html
 <!-- Script, available as `window.msgr` -->
 <script src="/node_modules/msgr/index.js"></script>
+```
+
+__Worker__
+
+If you are bundling your SW then you can use the Import methods above.
+
+Otherwise...
+
+```js
+// importScripts
+importScripts('/node_modules/msgr/index.js')
 ```
 
 ## Initialise & Example
