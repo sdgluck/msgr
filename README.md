@@ -15,6 +15,8 @@ Makes communication between a client and service worker super easy...
 - Easily respond to any message by calling `respond()` in the handler
 - Receive a response for a message using the familiar Promise `then()` method
 
+_To see it being used in the wild, check out the source code of [`fetch-sync`](https://github.com/sdgluck/fetch-sync)._
+
 ## Table of Contents
 
 - [Import](#import)
