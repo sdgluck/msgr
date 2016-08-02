@@ -9,13 +9,10 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
 Makes communication between a client and service worker super easy...
 
-- Send messages from `client -> worker` and vice-versa with `channel.send()`
-- Accommodates complex communications with a simple API:
-    - anonymous, data-only messages: `channel.send({ name: 'Sam Gluck' })`
-    - typed-only messages: `channel.send('DELETE_CACHE')`
-    - typed messages with data: `channel.send('CACHE', { url: '/asset-to-cache.jpg' })`
-- Easily respond to any message by calling `respond()` in the handler
-- Receive one-off responses using `channel.send(<options>).then(<response_handler>)`
+- Send messages from `client -> worker` and vice-versa
+- Accommodates complex communications with a simple API
+- Easily respond to any message
+- Receive one-off responses to messages
 
 _To see it being used in the wild, check out the source code of [`fetch-sync`](https://github.com/sdgluck/fetch-sync)._
 
