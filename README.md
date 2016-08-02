@@ -9,11 +9,13 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
 Makes communication between a client and service worker super easy...
 
-- Send messages from `client -> worker` and `worker -> client` with one call to `channel.send()`
-- Simple API: send anonymous data-only messages, typed-only messages, or typed messages with data
-- Register handlers for typed messages and anonymous messages
+- Send messages from `client -> worker` and vice-versa with `channel.send()`
+- Accommodates complex communications with a simple API:
+    - anonymous, data-only messages
+    - typed-only messages 
+    - typed messages with data
 - Easily respond to any message by calling `respond()` in the handler
-- Receive a response for a message using the familiar Promise `then()` method
+- Receive one-off responses using `channel.send(<options>).then(<response_handler>)`
 
 _To see it being used in the wild, check out the source code of [`fetch-sync`](https://github.com/sdgluck/fetch-sync)._
 
