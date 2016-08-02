@@ -9,7 +9,7 @@ Made with ❤ at [@outlandish](http://www.twitter.com/outlandish)
 
 Makes communication between a client and service worker super easy...
 
-- Send messages from `client -> worker` and vice-versa
+- Send messages from client to worker and vice-versa
 - Accommodates complex communications with a simple API
 - Easily respond to any message
 - Receive one-off responses to messages
